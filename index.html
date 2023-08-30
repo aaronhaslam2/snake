@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang = "en-US">
+<head>
+    <meta charset = "UTF-8">
+    <link rel="stylesheet" href="styles/style.css">
+    <title>Snake Game</title>
+</head>
+<body>
+    <h1 id = "title">Snake Game</h1>
+    <div id = "outerBox">
+        <div id = "sideBar">
+            <hr>
+            <h2>Controls</h2>
+            <input type="button" id="startButton" value="Start New Game" onclick="startNewGame();"></input>
+            <div>
+                <input type="button" id="resumeButton" value="Resume" onclick="resumeGame();"></input>
+                <input type="button" id="pauseButton" value="Pause" onclick="pauseGame();"></input>
+            </div>
+            <hr>
+            <h2>Name</h2>
+            <input type="text" id="name" maxlength="3" value="AAA"></input>
+            <hr>
+            <h2>Number of Obstacles</h2>
+            <input type="number" id="numberOfObstacles" value="0" min="0" max="100" step="1"></input>
+            <hr>
+            <h2>Number of Food</h2>
+            <input type="number" id="numberOfFood" value="1" min="1" max="100" step="1"></input>
+            <hr>
+            <h2>Gameboard Size</h2>
+            <input type="number" id="gameBoardSize" value="50" min="8" max="1000" step="2"></input>
+            <hr>
+            <h2>Snake Speed</h2>
+            <input type="number" id="snakeSpeed" value="10" min="1" max="100" step="1"></input>
+            <hr>
+        </div>
+
+        <div id = "gameCanvas">
+            <canvas id = "id-canvas"
+                width = "700" height = "700">
+            </canvas>
+        </div>
+
+    
+        <div id="scoreBox">
+            <hr>
+            <p><h2>Score</h2></p>
+            <p id="currentScore">0</p>
+            <hr>
+            <div id="list">
+                    <h2>Top 3 Scores</h2>
+                    <ol id="scoreList"></ol>
+            </div>
+            <hr>
+        </div>
+        
+        
+
+        
+    </div>
+    <p id="footer">Created by Aaron</p>
+    
+
+    <script src = "scripts/game.js"></script>
+    <script src = "scripts/input.js"></script>
+    
+</body>
+</html>
