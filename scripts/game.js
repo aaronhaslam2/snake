@@ -2,10 +2,19 @@ let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
 
 //////////////////////////////////
-// Scoring
+// Classes
 //////////////////////////////////
-let SCORES = [];
-let HIGHSCORES = [];
+class WORM{
+    constructor(){
+        this.HEAD = 0;
+        this.wormCoords = [{x: gameboardSize/2-1,y: gameboardSize/2-1}];
+        this.direction = '';
+        this.ateSomething = false;
+        this.wormCounter = 2;
+        this.score = 0;
+    }    
+};
+
 class Score{
     constructor(dateObject,year,month,day,hour,minute,second,score,name,duration){
         this.dateObject = dateObject;
@@ -21,54 +30,60 @@ class Score{
     }
 }
 
-let runGame = false;
-let firstRender = true;
-let youLost = false;
-let newHighScore = false;
-
-let startGameTime = performance.now();
-
-
-
-
+//////////////////////////////////
+// Variables received from user interface
+//////////////////////////////////
 let gameboardSize = document.getElementById("gameBoardSize").value;
 let numberOfObstacles = document.getElementById("numberOfObstacles").value;
 let numberOfFood = document.getElementById("numberOfFood").value;
 let snakeSpeed = document.getElementById("snakeSpeed").value;
 
-let refreshRate = 1000 / snakeSpeed;
-let timeSinceLastRefresh = refreshRate;
 
+//////////////////////////////////
+// Variables to save things
+//////////////////////////////////
+let SCORES = [];
+let HIGHSCORES = [];
+let KEYSTROKES = [];
+let OBSTACLES = [];
+let FOOD = [];
+
+
+
+//////////////////////////////////
+// Game States
+//////////////////////////////////
+let runGame = false;
+let firstRender = true;
+let youLost = false;
+let newHighScore = false;
+
+//////////////////////////////////
+// Save each direction into a variable
+//////////////////////////////////
 let UP = 'up';
 let DOWN = 'down';
 let LEFT = 'left';
 let RIGHT = 'right';
 
+
+
+let startGameTime = performance.now();
+let refreshRate = 1000 / snakeSpeed;
+let timeSinceLastRefresh = refreshRate;
 let deltaX = canvas.width / gameboardSize;
 let deltaY = canvas.height / gameboardSize;
 let prevTime = performance.now();
 
-let KEYSTROKES = [];
-let OBSTACLES = [];
-let FOOD = [];
 
-class WORM{
-    constructor(){
-        this.HEAD = 0;
-        this.wormCoords = [{x: gameboardSize/2-1,y: gameboardSize/2-1}];
-        this.direction = '';
-        this.ateSomething = false;
-        this.wormCounter = 2;
-        this.score = 0;
-    }    
-};
+
+
 
 let worm = new WORM();
 
 //////////////////////////////////
 // Gameplay Functions
 //////////////////////////////////
-
 function startGame(){
     runGame = true;
     firstRender = true;
@@ -93,35 +108,23 @@ function startNewGame(){
     firstRender = true;
     youLost = false;
     newHighScore = false;
-
     updateGameBoardSize();
-
     startGameTime = performance.now();
-
     updateObstacleAndFoodAmounts();
-
     updateSnakeSpeed();    
-
     KEYSTROKES = [];
     OBSTACLES = [];
     FOOD = [];
-
     initObstacles();
     initFOOD();
-
     worm = new WORM();
 }
-
 function gameOver(){
     let endGameTime = performance.now();
     let totalGameTime = Math.floor((endGameTime - startGameTime)/60000);
-
-
     let timeStamp = new Date();
-
     let name = document.getElementById("name").value;
     worm.name = name;
-
     let score = new Score(
         timeStamp,
         timeStamp.getFullYear(),
@@ -134,21 +137,13 @@ function gameOver(){
         worm.name,
         totalGameTime,
     );
-
-
     SCORES.push(score);
     addToHighScores(score);
-
     youLost = true;
     pauseGame();
-
-
     printScoreList();
-
-    
     printGameOver();
 }
-
 function addToHighScores(score){    
     if(HIGHSCORES.length == 0){
         HIGHSCORES.push(score);
@@ -172,6 +167,10 @@ function addToHighScores(score){
     }
 }
 
+
+//////////////////////////////////
+// Gameplay Updating Functions
+//////////////////////////////////
 function updateGameBoardSize(){
     let boardSize = document.getElementById("gameBoardSize").value;
     if(boardSize >= 8 && boardSize <= 1000 && boardSize%2 == 0){
@@ -182,10 +181,7 @@ function updateGameBoardSize(){
         alert("Board Size needs to be an even number. \n Max Board Size: 1000 \n Min Board Size: 8");
         document.getElementById("gameBoardSize").value = 50;
     }
-
-    
 }
-
 function updateObstacleAndFoodAmounts(){
     let numObs = document.getElementById("numberOfObstacles").value;
     let numFood = document.getElementById("numberOfFood").value;
@@ -208,7 +204,6 @@ function updateObstacleAndFoodAmounts(){
         document.getElementById("numberOfFood").value = 1;
     }
 }
-
 function updateSnakeSpeed(){
     snakeSpeed = document.getElementById("snakeSpeed").value;
     refreshRate = 1000 / snakeSpeed;
@@ -236,7 +231,6 @@ function getRandomCoord(){
     let xCoord = Math.floor(Math.random()*Math.floor(gameboardSize));
     let yCoord = Math.floor(Math.random()*Math.floor(gameboardSize));
     let coord = {x:xCoord, y:yCoord};
-    
     return coord;
 }
 
